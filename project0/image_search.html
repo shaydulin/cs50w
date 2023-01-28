@@ -3,7 +3,7 @@
 <html>
     <head lang="en">
         <title>
-            Search
+            Image Search
         </title>
         <link href="styles.css" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,14 +17,14 @@
 
             <div class="header">
                 <div class="nav">
-                    <a class="nav-item" href="image_search.html">Image search</a>
-                    <a class="nav-item" href="advanced_search.html">Advanced search</a>
+                    <a class="nav-item" href="index.html">Google search</a>
                 </div>
             </div>
             
             <div class="logo-section">
                 <div class="logo">
                     <img class="image" src="static/logo.png">
+                    <div class="images-writing">images</div>
                 </div>
             </div>
             
@@ -32,10 +32,7 @@
                 <form action="https://www.google.com/search" autocomplete="off">
                     <div class="search-q">
                         <input type="text" name="q" autofocus>
-                    </div>
-                    <div class="search-buttons">
-                        <input type="submit" value="Google Search">
-                        <input type="submit" name="btnI" value="I`m Feeling Lucky">
+                        <input name="tbm" value="isch" type="hidden">
                     </div>
                 </form>
             </div>

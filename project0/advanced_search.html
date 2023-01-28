@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html>
+    <head lang="en">
+        <title>
+            Advanced Search
+        </title>
+        <link href="styles.css" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <div class="page">
+
+            <div class="header">
+                <div class="noflex">
+                    <img src="static/logo.png" height="25px">
+                </div>
+                <div class="nav">
+                    <a class="nav-item" href="index.html">Google search</a>
+                </div>
+            </div>
+
+            <div class="advheader">Advanced Search</div>
+
+            <div>
+                <form action="https://www.google.com/search" autocomplete="off">
+
+                    <div class="adv-form-header">
+                        <div class="form-line">
+                            <div class="label-header">Find pages with...</div>
+                            <div class="text"></div>
+                            <div class="comment-header">To do this in the search box.</div>
+                        </div>
+                    </div>
+
+                    <div class="adv-form-fields">
+
+                        <div class="form-line">
+                            <div class="label">
+                                <label for="as_q">all these words:</label>
+                            </div>
+                            <div class="text">
+                                <input id="as_q" name="as_q" type="text" autofocus>
+                            </div>
+                            <div class="comment">
+                                <div class="manual">Type the important words: </div>
+                                <div class="example">Web Programming with Python and JavaScript</div>
+                            </div>
+                        </div>
+    
+                        <div class="form-line">
+                            <div class="label">
+                                <label for="as_epq">this exact word or phrase:</label>
+                            </div>
+                            <div class="text">
+                                <input id="as_epq" name="as_epq" type="text">
+                            </div>
+                            <div class="comment">
+                                <div class="manual">Put exact words in quotes: </div>
+                                <div class="example">"Web Programming"</div>
+                            </div>
+                        </div>
+    
+                        <div class="form-line">
+                            <div class="label">
+                                <label for="as_oq">any of these words:</label>
+                            </div>
+                            <div class="text">
+                                <input id="as_oq" name="as_oq" type="text">
+                            </div>
+                            <div class="comment">
+                                <div class="manual">Type OR between all the words you want: </div>
+                                <div class="example">Python OR JavaScript</div>
+                            </div>
+                        </div>
+    
+                        <div class="form-line">
+                            <div class="label">
+                                <label for="as_eq">none of these words:</label>
+                            </div>
+                            <div class="text">
+                                <input id="as_eq" name="as_eq" type="text">
+                            </div>
+                            <div class="comment">
+                                <div class="manual">Put a minus sign just before words that you don't want: </div>
+                                <div class="example">-PHP, -"Harvard sucks"</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="adv-form-submit">
+                        <div class="form-line">
+                            <div class="label"></div>
+                            <div class="button">
+                                <input type="submit" value="Advanced Search">
+                            </div>
+                            <div class="comment"></div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="footer">
+                <div class="footer-item"><a href="../index.html">To All Projects</a></div>
+            </div>
+    
+        </div>
+    </body>
+</html>
