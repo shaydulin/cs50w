@@ -17,7 +17,7 @@ button {
 .page {
     font-family: Arial, Helvetica, sans-serif;
     height: 100%;
-    min-width: 320px;
+    min-width: 550px;
 }
 
 .header {
@@ -54,7 +54,7 @@ button {
 }
 
 .logo {
-    max-width: 356px;
+    width: 356px;
     height: 100%;
     position: relative;
     margin-left: auto;
@@ -64,7 +64,7 @@ button {
 .image {
     position: absolute;
     bottom: 0px;
-    max-height: 96px;
+    height: 96px;
 }
 
 .images-writing {
@@ -84,7 +84,7 @@ button {
 .border {
     margin-left: auto;
     margin-right: auto;
-    max-width: 500px;
+    width: 500px;
     height: 44px;
     border: 1px solid #ddd;
     border-radius: 21px;
