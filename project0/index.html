@@ -29,7 +29,9 @@
             <div class="search-bar">
                 <form action="https://www.google.com/search" autocomplete="off">
                     <div class="search-q">
-                        <input type="text" name="q" autofocus>
+                        <div class="border">
+                            <input id="q" type="text" name="q" autofocus>
+                        </div>
                     </div>
                     <div class="search-buttons">
                         <input type="submit" value="Google Search">
@@ -43,5 +45,18 @@
             </div>
     
         </div>
+
+        <script>
+            document.getElementById("q").addEventListener("focusin", light_on);
+            document.getElementById("q").addEventListener("focusout", light_off);
+
+            function light_on() {
+                event.target.parentElement.classList.add("highlight");
+            }
+            function light_off() {
+                event.target.parentElement.classList.remove("highlight");
+            }
+        </script>
+
     </body>
 </html>
