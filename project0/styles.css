@@ -10,6 +10,12 @@ body, html {
 .page {
     font-family: Arial, Helvetica, sans-serif;
     height: 100%;
+    min-width: 550px;
+}
+
+.adv-page {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
     min-width: 750px;
 }
 
@@ -241,7 +247,7 @@ body, html {
 
 .comment {
     width: 380px;
-    flex-shrink: 0.5;
+    flex-shrink: 0.4;
     font-size: 12px;
     color: #555;
     padding: 0 5px;
