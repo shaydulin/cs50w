@@ -29,7 +29,7 @@
             <div class="search-bar">
                 <form action="https://www.google.com/search" autocomplete="off">
                     <div class="search-q">
-                        <div class="border">
+                        <div class="border highlight">
                             <input id="q" type="text" name="q" autofocus>
                         </div>
                     </div>
@@ -47,8 +47,8 @@
         </div>
 
         <script>
-            document.getElementById("q").addEventListener("focusin", light_on);
-            document.getElementById("q").addEventListener("focusout", light_off);
+            document.getElementById("q").addEventListener("focus", light_on);
+            document.getElementById("q").addEventListener("blur", light_off);
 
             function light_on() {
                 event.target.parentElement.classList.add("highlight");
