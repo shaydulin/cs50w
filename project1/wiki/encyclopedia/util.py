@@ -3,6 +3,10 @@ import re
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
+#need for apology func
+from django.shortcuts import render
+
+
 
 def list_entries():
     """

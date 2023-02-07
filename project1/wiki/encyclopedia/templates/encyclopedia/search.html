@@ -1,0 +1,23 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block body %}
+    {% if query %}
+        <h1>For "{{ query }}" found:</h1>
+
+        {% if entries %}
+            <ul>
+                {% for entry in entries %}
+                    <li><a href="wiki/{{ entry }}">{{ entry }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>nothing. Type a query into the search box. Or <a href="{% url 'new' %}">create</a> a new page.</p>
+        {% endif %}
+    {% else %}
+        <p>Type a query into the search box.</p>
+    {% endif %}
+{% endblock %}
