@@ -1,0 +1,122 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+
+{% block title %}
+    Auctions: {{ listing.title }}
+{% endblock %}
+
+{% block body %}
+    <div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 class="content-header">"{{ listing.title }}" by {{ creator }}</h2>
+            </div>
+            <div class="content-header">
+                {% if listing.category %}<a class="auctions-link" href="{% url 'category_view' listing.category %}">{{ listing.category }}</a>{% endif %}
+            </div>
+        </div>
+
+        <div class="listing-itself">
+
+            <div class="listing-itself-img">
+                {% if listing.img_url %}
+                    <img src="{{ listing.img_url }}">
+                {% else %}
+                    <img src="{% static 'auctions/images/placeholder.png' %}">
+                {% endif %}
+            </div>
+
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center;">
+            <div style="display: flex; flex-wrap: wrap; align-items: center;">
+            <div class="listing-price">
+                {% if bid %}${{ bid.bid|floatformat:2 }}{% else %} ${{ listing.starting_bid|floatformat:2 }} - No bids yet.{% endif %}{% if user.id == bid.user_id %}{% if listing.active %} - Your Bid {% else %} - You won{% endif %}{% endif %}
+            </div>
+
+            {% if user.is_authenticated %}
+
+                {% if listing.active %}
+
+                    {% if user.id == listing.creator_id %}
+                        <div class="listing-itself-field">
+                            <form action="{% url 'close_listing' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                                <input class="auctions-btn" type="submit" value="Close">
+                            </form>
+                        </div></div></div>
+                    {% else %}
+                        {% if user.id != bid.user_id %}
+                            <div class="listing-itself-field">
+                                <form action="{% url 'bid' %}" method="POST">
+                                    {% csrf_token %}
+                                    {{ BidForm }}
+                                    <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                                    <input class="auctions-btn" type="submit" value="Bid">
+                                </form>
+                            </div>
+                        {% endif %}
+                        </div>
+                        <div class="listing-itself-field">
+                            <form action="{% url 'watchlist' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                                <input class="auctions-btn" type="submit" value="{{ button }}">
+                            </form>
+                        </div></div>
+                    {% endif %}
+                {% else %}
+                    </div></div>
+                {% endif %}
+
+            {% else %}
+            
+                <div class="listing-itself-field">
+                    <a class="auctions-link" href={% url 'login' %}>Log in</a> or <a class="auctions-link" href={% url 'register' %}>register</a> to bid.
+                </div></div></div>
+
+            {% endif %}
+            <div class="listing-itself-description">
+                {{ listing.description }}
+            </div>
+        </div>
+
+        <div>
+            <h3 class="content-header">Comments:</h3>
+        </div>
+
+        {% for comment in comments %}
+            <div class="comment">
+                <div class="comment-header">
+                    <span style="color: #6dfeef;">{{ comment.user.username }}</span> - <span style="color: #079889;">{{ comment.add_date }}</span>
+                </div>
+                <div class="comment-body">
+                    {{ comment }}
+                </div>
+            </div>
+        {% empty %}
+            <div style="padding: 5px 10px">No comments yet</div>
+        {% endfor %}
+
+        {% if listing.active %}
+
+            {% if user.is_authenticated %}
+                <form action="{% url 'comment' %}" method="POST">
+                    {% csrf_token %}
+                    <div style="margin-top: 20px;">
+                        {{ CommentForm }}
+                    </div>
+                    <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                    <div style="margin: 5px 0 10px 0;">
+                        <input class="auctions-btn" type="submit" value="Comment">
+                    </div>
+                </form>
+            {% else %}
+                <div style="padding: 5px 10px"><a class="auctions-link" href={% url 'login' %}>Log in</a> or <a class="auctions-link" href={% url 'register' %}>register</a> to write a comment.</div>
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}

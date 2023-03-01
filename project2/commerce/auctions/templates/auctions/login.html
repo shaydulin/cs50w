@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Auctions: log in
+{% endblock %}
+
+{% block body %}
+    <div>
+        <h2 class="content-header">Login</h2>
+
+        <form action="{% url 'login' %}" method="post">
+            <div class="auctions-form">
+                {% csrf_token %}
+                <input autofocus type="text" name="username" placeholder="Username">
+                <input type="password" name="password" placeholder="Password">
+                <input class="auctions-btn" type="submit" value="Login">
+            </div>
+        </form>
+        <div style="padding: 5px 10px">
+            Don't have an account? <a class="auctions-link" href="{% url 'register' %}">Register here.</a>
+        </div>
+    </div>
+{% endblock %}

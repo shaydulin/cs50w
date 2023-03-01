@@ -1,0 +1,60 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+
+{% block title %}
+    Auctions: {{ title }}
+{% endblock %}
+
+{% block body %}
+    <div>
+
+        <h2 class="content-header">{{ header }}</h2>
+
+        {% for listing in listings %}
+            <div class="listing">
+
+                <div class="listing-img">
+                    {% if listing.img_url %}
+                        <img src="{{ listing.img_url }}">
+                    {% else %}
+                        <img src="{% static 'auctions/images/placeholder.png' %}">
+                    {% endif %}
+                </div>
+
+                <div class="listing-rest">
+
+                    <div style="display:flex; justify-content: space-between; align-items: center;">
+
+                        <div class="listing-title" style="flex-grow: 1;">
+                            <a class="auctions-link-title" href={% url 'listing' listing.id %}>{{ listing.title }}</a>
+                        </div>
+
+                        <div class="listing-category">
+                            {% if listing.category %}<a class="auctions-link" href="{% url 'category_view' listing.category %}">{{ listing.category }}</a>{% endif %}
+                        </div>
+
+                    </div>
+
+                    <div class="listing-price">
+                        ${% if listing.bid != None %}{{ listing.bid|floatformat:2 }}{% else %}{{ listing.starting_bid|floatformat:2 }}{% endif %}
+                    </div>
+
+                    <div class="listing-description">
+                        {% if listing.description.80 %}
+                            {{ listing.description|slice:70 }}...
+                        {% else %}
+                            {{ listing.description }}
+                        {% endif %}
+                    </div>
+
+                </div>
+                
+            </div>
+
+        {% empty %}
+            <div style="padding: 10px 10px">No listings yet.</div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
