@@ -1,0 +1,31 @@
+textarea {
+    min-height: 400px;
+}
+
+#emails-view > div {
+    cursor: pointer;
+    margin: 5px 0;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+#emails-view > div:hover {
+    border-color: #007bff;
+}
+
+.read-true {
+    background-color: #e9ecef;
+}
+
+.read-false {
+    background-color: white;
+}
+
+.mail-body {
+    white-space: pre-wrap;
+}
+
+.p-2 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
