@@ -1,0 +1,59 @@
+{% extends 'network/index.html' %}
+
+{% block index_extension %}
+
+    <div style="display:flex; justify-content:left; align-items: baseline; flex-wrap: wrap;">
+
+        <div>
+            <div class="profile-logo" >{{ person.username.0|upper }}</div>
+        </div>
+
+        <div>
+            <h2>{{ person }}</h2>
+        </div>
+
+        {% comment %} render follow button if user visits someone else's page {% endcomment %}
+        {% if user.is_authenticated and user != person %}
+            <button onclick="follow()" id="follow-btn" style="width: 90px; text-align: center; margin: 0 10px" type="button" class="btn btn-outline-primary">{% if user_follows %}Unfollow{% else %}Follow{% endif %}</button>
+        {% endif %}
+
+        <div style="display:flex;">
+            <div id="followers" style="padding: 10px">
+                {{ followers_count }} followers
+            </div>
+
+            <div id="followings" style="padding: 10px">
+                {{ followings_count }} followings
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h3>Posts from {{ person }}</h3>
+
+    <script>
+        function follow() {
+            fetch('{% url 'follow_user' person.id %}', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    const message = document.createElement('div');
+                    message.innerHTML = data.error;
+                    message.className = 'message error';
+                    const body = document.querySelector('body');
+                    body.append(message)
+                }
+                else {
+                    document.getElementById("follow-btn").innerHTML = data.follow_btn
+                    document.getElementById("followers").innerHTML = data.followers_count + ' followers'
+                }
+            })
+        }
+    </script>
+
+{% endblock index_extension %}
+

@@ -1,0 +1,198 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+    {% block index_extension %}
+        {% comment %} all this stuff will be working if index_extension block is empty (it filled by user-profile page) {% endcomment %}
+        <div style="display:flex; justify-content:left; align-items: baseline; flex-wrap: wrap;">
+            <h2>{{ title }}</h2>
+            {% comment %} let's add button for hiding and showing form {% endcomment %}
+            {% if user.is_authenticated and title == "All posts" %}
+                <button onclick="show_AddPostForm()" style="width: 100px; text-align: center; margin: 0 10px" class="btn btn-outline-primary">Add post</button>
+            {% endif %}
+        </div>
+    {% endblock %}
+
+    {% comment %} form for adding comments {% endcomment %}
+    {% if form and user.is_authenticated%}
+        <div id="show_AddPostForm" class="post" style="display:none">
+            <h3>New post</h3>
+            <form action="{% url 'add_post' %}" method="POST">
+                {{ form }}
+                <input class="btn btn-outline-primary" type="submit" value="post">
+            </form>
+        </div>
+    {% endif %}
+
+    {% comment %} posts {% endcomment %}
+    {% for post in page_obj %}
+        <div class="post" id="post{{ post.id }}">
+
+            <div class="post-header">
+                <b><a href="{% url 'user-profile' post.poster.id %}">{{ post.poster }}</a></b> on {{ post.add_date }}
+            </div>
+
+            <div class="post-content">
+                <p id="content{{ post.id }}">{{ post.content }}</p>
+                <textarea id="editForm{{ post.id }}" style="display: none;"></textarea>
+            </div>
+
+            {% comment %} show empty black heart if post is not liked and filled red heart if liked {% endcomment %}
+            <div class="post-likes">
+                <span>
+                    <svg id="liked{{ post.id }}istrue" {% if post.liked %}style="display: inline;"{% else %}style="display: none;"{% endif %} onclick="likePost({{ post.id }})" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                    <svg id="liked{{ post.id }}isfalse" {% if post.liked %}style="display: none;"{% else %}style="display: inline;"{% endif %} onclick="likePost({{ post.id }})" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-heart" viewBox="0 0 16 16">
+                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                    </svg>
+                </span>
+                <span id="likesCount{{ post.id }}">
+                    {{ post.likes_count }}
+                </span>
+            </div>
+
+            {% comment %} show and hide post editing menu buttons {% endcomment %}
+            <div class="post-footer">
+                {% if user == post.poster %}
+                    <button id="editBtn{{ post.id }}" onclick="editPost({{ post.id }})" class="btn btn-link" style="padding: 0;">Edit</button>
+                    <button id="saveBtn{{ post.id }}" onclick="savePost({{ post.id }})" class="btn btn-link" style="padding: 0; display:none;">Save</button>
+                    <button id="cancelBtn{{ post.id }}" onclick="cancelEditing({{ post.id }})" class="btn btn-link" style="padding: 0 10px; display:none;">Cancel</button>
+                {% endif %}
+            </div>
+            
+        </div>
+    {% endfor %}
+
+    {% comment %} django paginator {% endcomment %}
+    {% if page_obj.has_other_pages %}
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a style="width: 90px; text-align: center;" class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><a style="width: 90px; text-align: center;" class="page-link" href="#">previous</a></li>
+            {% endif %}
+
+                <li class="page-item active"><a style="width: 50px; text-align: center;" class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item"><a style="width: 90px; text-align: center;" class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+            {% else %}
+                <li class="page-item disabled"><a style="width: 90px; text-align: center;" class="page-link" href="#">next</a></li>
+            {% endif %}
+        </ul>
+    {% elif not page_obj %}
+       <div>No posts yet</div>
+    {% endif %}
+
+    <script>
+
+        {% comment %} show and hide form for adding post {% endcomment %}
+        function show_AddPostForm() {
+            const form = document.getElementById('show_AddPostForm');
+            const btn = event.target;
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                btn.innerHTML = 'Cancel';
+            }
+            else {
+                form.style.display = 'none';
+                btn.innerHTML = 'Add post';
+            }
+        }
+
+        {% comment %} two functiions for show and hide post editing buttons {% endcomment %}
+        function editPost(post_id) {
+            document.getElementById(`editBtn${post_id}`).style.display = 'none';
+            document.getElementById(`saveBtn${post_id}`).style.display = 'inline';
+            document.getElementById(`cancelBtn${post_id}`).style.display = 'inline';
+
+            const content = document.getElementById(`content${post_id}`);
+            content.style.display = 'none';
+            const form = document.getElementById(`editForm${post_id}`);
+            form.style.display = 'block';
+            form.value = content.innerHTML;
+        }
+
+
+        function cancelEditing(post_id) {
+            document.getElementById(`editBtn${post_id}`).style.display = 'inline';
+            document.getElementById(`saveBtn${post_id}`).style.display = 'none';
+            document.getElementById(`cancelBtn${post_id}`).style.display = 'none';
+
+            const content = document.getElementById(`content${post_id}`);
+            content.style.display = 'block';
+            const form = document.getElementById(`editForm${post_id}`);
+            form.style.display = 'none';
+            form.value = '';
+        }
+
+
+        {% comment %} save post via async request {% endcomment %}
+        function savePost(post_id) {
+            const new_content = document.getElementById(`editForm${post_id}`);
+
+            fetch('{% url 'edit_post' %}', {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    new_content: new_content.value,
+                    id: post_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const content = document.getElementById(`content${post_id}`);
+                    content.innerHTML = new_content.value;
+                    content.style.display = 'block';
+                    const form = document.getElementById(`editForm${post_id}`);
+                    form.style.display = 'none';
+                    form.value = '';
+                    document.getElementById(`editBtn${post_id}`).style.display = 'inline';
+                    document.getElementById(`saveBtn${post_id}`).style.display = 'none';
+                    document.getElementById(`cancelBtn${post_id}`).style.display = 'none';
+
+                    const message = document.createElement('div');
+                    message.innerHTML = 'Post edited';
+                    message.className = 'message success';
+                    const body = document.querySelector('body');
+                    body.append(message)
+                }
+                else {
+                    const message = document.createElement('div');
+                    message.innerHTML = data.error;
+                    message.className = 'message error';
+                    const body = document.querySelector('body');
+                    body.append(message)
+                }
+            })
+        }
+
+        {% comment %} like post via async request {% endcomment %}
+        function likePost(post_id) {
+            fetch ('{% url 'like_post' %}', {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    id: post_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const likes_count = document.getElementById(`likesCount${post_id}`);
+                    likes_count.innerHTML = data.likes_count;
+                    document.getElementById(`liked${post_id}is${data.liked}`).style.display = 'inline';
+                    document.getElementById(`liked${post_id}is${!data.liked}`).style.display = 'none';
+                }
+                else {
+                    const message = document.createElement('div');
+                    message.innerHTML = data.error;
+                    message.className = 'message error';
+                    const body = document.querySelector('body');
+                    body.append(message)
+                }
+            })
+        }
+    </script>
+    
+{% endblock %}
